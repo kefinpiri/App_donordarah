@@ -21,10 +21,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Petugas::class);
     }
-    public function Pasien()
+    public function pasien()
     {
-        return $this->hasOne(pasien::class);
+        return $this->hasOne(Pasien::class);
     }
+    public function donorDarah()
+    {
+        return $this->hasMany(DonorDarah::class);
+    }
+
     /** @use HasFactory<UserFactory> */
 
     /**

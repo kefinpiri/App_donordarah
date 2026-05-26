@@ -63,7 +63,6 @@
                                         </form>
                                     </td>
                                 </tr>
-
                             @empty
                                 <tr>
                                     <td colspan="3" class="text-center">

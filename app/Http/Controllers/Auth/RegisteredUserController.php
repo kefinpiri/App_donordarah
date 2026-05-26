@@ -32,8 +32,25 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                'unique:' . User::class
+            ],
+            'password' => [
+                'required',
+                'confirmed',
+                Rules\Password::defaults()
+            ],
+
+            // ROLE
+            'role' => [
+                'required',
+                'in:donor,pemohon'
+            ],
         ]);
 
         $user = User::create([
@@ -42,10 +59,32 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Assign role
+        $user->assignRole($request->role);
+
         event(new Registered($user));
 
         Auth::login($user);
+        if ($user->hasRole('admin')) {
+            return redirect('/dashboard');
+        }
 
-        return redirect(route('dashboard', absolute: false));
+        // PETUGAS
+        if ($user->hasRole('petugas')) {
+            return redirect('/petugas/dashboard');
+        }
+
+        // PEMOHON
+        if ($user->hasRole('pemohon')) {
+            return redirect('/pemohon/dashboard');
+        }
+
+        // PENDONOR
+        if ($user->hasRole('donor')) {
+            return redirect('/donor/dashboard');
+        }
+
+        // Default
+        return redirect('/');
     }
 }

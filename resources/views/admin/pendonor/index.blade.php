@@ -1,277 +1,273 @@
 @extends('layouts.admin')
 
 @section('content')
-    {{-- ── Content Header ── --}}
     <div class="app-content-header">
         <div class="container-fluid">
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <h3 class="mb-0">
-                        <i class="bi bi-people-fill text-danger me-2"></i>
-                        Data Pendonor
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                <div>
+                    <h3 class="mb-1 fw-bold">
+                        <i class="bi bi-droplet-fill text-danger me-2"></i>
+                        Data Donor Darah
                     </h3>
-                    <small class="text-muted">Kelola seluruh data pendonor darah</small>
-                </div>
-                @can('create pendonor')
-                    <div class="col-sm-6 text-end mt-2 mt-sm-0">
-                        <a href="{{ route('admin.pendonor.create') }}" class="btn btn-danger">
-                            <i class="bi bi-plus-circle me-1"></i>
-                            Tambah Pendonor
-                        </a>
-                    </div>
-                @endcan
-            </div>
-        </div>
-    </div>
-    {{-- Alert Success --}}
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
-            <i class="bi bi-check-circle-fill fs-5"></i>
-            <span>{{ session('success') }}</span>
-            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
 
-    {{-- Summary Cards --}}
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="rounded-3 bg-danger bg-opacity-10 p-3">
-                        <i class="bi bi-people-fill text-danger fs-4"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bold fs-4 lh-1">{{ $pendonors->count() }}</div>
-                        <small class="text-muted">Total Pendonor</small>
-                    </div>
+                    <p class="text-muted mb-0">
+                        Monitoring seluruh pengajuan donor darah
+                    </p>
                 </div>
+
             </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="rounded-3 bg-primary bg-opacity-10 p-3">
-                        <i class="bi bi-gender-male text-primary fs-4"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bold fs-4 lh-1">
-                            {{ $pendonors->where('jenis_kelamin', 'laki-laki')->count() }}
-                        </div>
-                        <small class="text-muted">laki-laki</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="rounded-3 bg-pink bg-opacity-10 p-3" style="background-color:#fce4ec!important">
-                        <i class="bi bi-gender-female fs-4" style="color:#e91e63"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bold fs-4 lh-1">
-                            {{ $pendonors->where('jenis_kelamin', 'perempuan')->count() }}
-                        </div>
-                        <small class="text-muted">Perempuan</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex align-items-center gap-3 py-3">
-                    <div class="rounded-3 bg-success bg-opacity-10 p-3">
-                        <i class="bi bi-droplet-half text-success fs-4"></i>
-                    </div>
-                    <div>
-                        <div class="fw-bold fs-4 lh-1">
-                            {{ $pendonors->unique('golongan_darah')->count() }}
-                        </div>
-                        <small class="text-muted">Jenis Darah</small>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 
-    {{-- Main Card --}}
-    <div class="card shadow-sm border-0">
+    <div class="app-content">
+        <div class="container-fluid">
 
-        <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2 py-3">
-            <h5 class="card-title mb-0 d-flex align-items-center gap-2">
-                <i class="bi bi-table text-danger"></i>
-                Daftar Pendonor
-            </h5>
-            <span class="badge bg-danger rounded-pill">
-                {{ $pendonors->count() }} data
-            </span>
-        </div>
+            {{-- ALERT --}}
+            @if (session('success'))
+                <div class="alert alert-dismissible fade show border-0 rounded-3 mb-4 d-flex align-items-center gap-2"
+                    style="background:#EAF3DE; color:#3B6D11;">
 
-        <div class="card-body">
+                    <i class="bi bi-check-circle-fill"></i>
 
-            {{-- Search --}}
-            <form action="" method="GET" class="mb-4">
-                <div class="row g-2 align-items-end">
-                    <div class="col-12 col-md-5">
-                        <label class="form-label fw-semibold mb-1 small text-muted">Cari Pendonor</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0">
-                                <i class="bi bi-search text-muted"></i>
-                            </span>
-                            <input type="text" name="search" class="form-control border-start-0 ps-0"
-                                placeholder="Nama pendonor..." value="{{ request('search') }}">
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <button class="btn btn-danger w-100">
-                            <i class="bi bi-search me-1"></i> Cari
-                        </button>
-                    </div>
-                    @if (request('search'))
-                        <div class="col-6 col-md-2">
-                            <a href="{{ route('admin.pendonor.index') }}" class="btn btn-outline-secondary w-100">
-                                <i class="bi bi-x-circle me-1"></i> Reset
-                            </a>
-                        </div>
-                    @endif
+                    {{ session('success') }}
+
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+
                 </div>
-            </form>
+            @endif
 
-            {{-- Table --}}
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
+            {{-- CARD --}}
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
-                    <thead>
-                        <tr class="table-danger">
-                            <th class="text-center" width="5%">No</th>
-                            <th>Nama Pendonor</th>
-                            <th class="text-center">Gol. Darah</th>
-                            <th class="text-center">Rhesus</th>
-                            <th>No. HP</th>
-                            <th>Alamat</th>
-                            <th class="text-center" width="16%">Aksi</th>
-                        </tr>
-                    </thead>
+                <div class="card-body p-4">
 
-                    <tbody>
-                        @forelse ($pendonors as $item)
-                            <tr>
-                                <td class="text-center fw-semibold text-muted">
-                                    {{ $loop->iteration }}
-                                </td>
+                    {{-- SEARCH --}}
+                    <form action="" method="GET" class="mb-4">
 
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center flex-shrink-0"
-                                            style="width:36px;height:36px">
-                                            <i class="bi bi-person-fill text-danger"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-semibold">{{ $item->nama }}</div>
-                                            <small class="text-muted">
-                                                <i class="bi bi-{{ $item->jenis_kelamin == 'Laki-laki' ? 'gender-male text-primary' : 'gender-female' }} me-1"
-                                                    style="{{ $item->jenis_kelamin != 'Laki-laki' ? 'color:#e91e63' : '' }}"></i>
-                                                {{ $item->jenis_kelamin }}
-                                            </small>
-                                        </div>
-                                    </div>
-                                </td>
+                        <div class="row g-2">
 
-                                <td class="text-center">
-                                    <span class="badge bg-danger rounded-pill px-3 fs-6 fw-bold">
-                                        {{ $item->golongan_darah }}
+                            <div class="col-md-5">
+
+                                <div class="input-group">
+
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="bi bi-search text-muted"></i>
                                     </span>
-                                </td>
 
-                                <td class="text-center">
-                                    @if ($item->rhesus == '+')
-                                        <span class="badge bg-success rounded-pill px-2">
-                                            <i class="bi bi-plus-circle me-1"></i>Positif
-                                        </span>
-                                    @else
-                                        <span class="badge bg-secondary rounded-pill px-2">
-                                            <i class="bi bi-dash-circle me-1"></i>Negatif
-                                        </span>
-                                    @endif
-                                </td>
+                                    <input type="text" name="search" class="form-control border-start-0 ps-0"
+                                        placeholder="Cari lokasi donor..." value="{{ request('search') }}">
 
-                                <td>
-                                    <a href="tel:{{ $item->no_hp }}"
-                                        class="text-decoration-none text-body d-flex align-items-center gap-1">
-                                        <i class="bi bi-telephone-fill text-success small"></i>
-                                        {{ $item->no_hp }}
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <button class="btn w-100 text-white fw-medium" style="background-color:#b91c1c;">
+
+                                    <i class="bi bi-search me-1"></i>
+                                    Cari
+
+                                </button>
+
+                            </div>
+
+                            @if (request('search'))
+                                <div class="col-md-2">
+
+                                    <a href="{{ route('admin.pendonor.index') }}" class="btn btn-outline-secondary w-100">
+
+                                        <i class="bi bi-arrow-clockwise me-1"></i>
+                                        Reset
+
                                     </a>
-                                </td>
 
-                                <td>
-                                    <span class="d-inline-block text-truncate" style="max-width:160px"
-                                        title="{{ $item->alamat }}">
-                                        <i class="bi bi-geo-alt text-muted me-1"></i>
-                                        {{ $item->alamat }}
-                                    </span>
-                                </td>
+                                </div>
+                            @endif
 
-                                <td>
-                                    <div class="d-flex justify-content-center gap-1 flex-wrap">
+                        </div>
 
-                                        <a href="{{ route('admin.pendonor.show', $item->id) }}"
-                                            class="btn btn-info btn-sm" title="Lihat Detail">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        @can('edit pendonor')
-                                            <a href="{{ route('admin.pendonor.edit', $item->id) }}"
-                                                class="btn btn-warning btn-sm" title="Edit Data">
-                                                <i class="bi bi-pencil-square"></i>
+                    </form>
+
+                    {{-- TABLE --}}
+                    <div class="table-responsive">
+
+                        <table class="table align-middle mb-0">
+
+                            <thead style="background:#f9fafb;">
+
+                                <tr style="border-bottom:2px solid #e5e7eb;">
+
+                                    <th class="text-center py-3 fw-semibold text-secondary">
+                                        No
+                                    </th>
+
+                                    <th class="py-3 fw-semibold text-secondary">
+                                        Tanggal Donor
+                                    </th>
+
+                                    <th class="py-3 fw-semibold text-secondary">
+                                        Lokasi
+                                    </th>
+
+                                    <th class="py-3 fw-semibold text-secondary">
+                                        Status
+                                    </th>
+
+                                    <th class="py-3 fw-semibold text-secondary">
+                                        Catatan
+                                    </th>
+
+                                    <th class="text-center py-3 fw-semibold text-secondary">
+                                        Aksi
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @forelse ($pendonors as $item)
+                                    <tr style="border-bottom:1px solid #e5e7eb;">
+
+                                        {{-- NO --}}
+                                        <td class="text-center py-3 text-muted fw-semibold">
+                                            {{ $loop->iteration }}
+                                        </td>
+
+                                        {{-- TANGGAL --}}
+                                        <td class="py-3">
+
+                                            <div class="d-flex align-items-center gap-2">
+
+                                                <i class="bi bi-calendar3 text-danger"></i>
+
+                                                <span>
+                                                    {{ \Carbon\Carbon::parse($item->tanggal_donor)->format('d M Y') }}
+                                                </span>
+
+                                            </div>
+
+                                        </td>
+
+                                        {{-- LOKASI --}}
+                                        <td class="py-3">
+
+                                            <div class="d-flex align-items-center gap-2">
+
+                                                <i class="bi bi-geo-alt-fill text-danger"></i>
+
+                                                <span>
+                                                    {{ $item->lokasi }}
+                                                </span>
+
+                                            </div>
+
+                                        </td>
+
+                                        {{-- STATUS --}}
+                                        <td class="py-3">
+
+                                            @if ($item->status == 'Menunggu')
+                                                <span class="badge rounded-pill px-3 py-2"
+                                                    style="background:#FEF3C7;color:#92400E;">
+
+                                                    Menunggu
+
+                                                </span>
+                                            @elseif ($item->status == 'Diterima')
+                                                <span class="badge rounded-pill px-3 py-2"
+                                                    style="background:#DBEAFE;color:#1D4ED8;">
+
+                                                    Diterima
+
+                                                </span>
+                                            @elseif ($item->status == 'Selesai')
+                                                <span class="badge rounded-pill px-3 py-2"
+                                                    style="background:#DCFCE7;color:#166534;">
+
+                                                    Selesai
+
+                                                </span>
+                                            @else
+                                                <span class="badge rounded-pill px-3 py-2"
+                                                    style="background:#FEE2E2;color:#991B1B;">
+
+                                                    {{ $item->status }}
+
+                                                </span>
+                                            @endif
+
+                                        </td>
+
+                                        {{-- CATATAN --}}
+                                        <td class="py-3 text-muted">
+                                            {{ $item->catatan ?? '-' }}
+                                        </td>
+
+                                        {{-- AKSI --}}
+                                        <td class="text-center py-3">
+
+                                            <a href="{{ route('admin.pendonor.show', $item->id) }}"
+                                                class="btn btn-sm rounded-pill px-3"
+                                                style="background:#b91c1c;color:white;">
+
+                                                <i class="bi bi-eye"></i>
+                                                Detail
+
                                             </a>
-                                        @endcan
-                                        @can('delete pendonor')
-                                            <form action="{{ route('admin.pendonor.destroy', $item->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus Data"
-                                                    onclick="return confirm('Yakin ingin menghapus data pendonor ini?')">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-                                        @endcan
-                                    </div>
-                                </td>
 
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7" class="text-center py-5">
-                                    <div class="d-flex flex-column align-items-center gap-2 text-muted">
-                                        <i class="bi bi-inbox fs-1 text-secondary opacity-50"></i>
-                                        <span class="fw-semibold">Data pendonor belum tersedia</span>
-                                        <a href="{{ route('admin.pendonor.create') }}"
-                                            class="btn btn-sm btn-danger mt-1">
-                                            <i class="bi bi-plus-circle me-1"></i> Tambah Pendonor
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
+                                        </td>
 
-                </table>
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+
+                                        <td colspan="6" class="text-center py-5 text-muted">
+
+                                            <i class="bi bi-droplet fs-3 d-block mb-2 text-danger"></i>
+
+                                            Data donor belum tersedia
+
+                                        </td>
+
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                {{-- FOOTER --}}
+                @if ($pendonors->count() > 0)
+                    <div class="card-footer border-0 px-4 py-3" style="background:#f9fafb;">
+
+                        <span class="text-muted small">
+
+                            <i class="bi bi-info-circle me-1"></i>
+
+                            Total donor:
+                            <strong style="color:#b91c1c;">
+                                {{ $pendonors->count() }}
+                            </strong>
+
+                        </span>
+
+                    </div>
+                @endif
+
             </div>
-            {{-- end table-responsive --}}
 
         </div>
-        {{-- end card-body --}}
-
-        @if ($pendonors->count() > 0)
-            <div class="card-footer bg-transparent text-muted small">
-                <i class="bi bi-info-circle me-1"></i>
-                Menampilkan <strong>{{ $pendonors->count() }}</strong> data pendonor
-            </div>
-        @endif
-
-    </div>
-    {{-- end card --}}
-
-    </div>
     </div>
 @endsection

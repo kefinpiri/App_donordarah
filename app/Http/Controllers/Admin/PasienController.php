@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pasien;
+use App\Models\PermintaanDarah;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -26,7 +27,7 @@ class PasienController extends Controller implements HasMiddleware
 
     public function index()
     {
-        $pasien = Pasien::latest()->get();
+        $pasien = PermintaanDarah::latest()->get();
         return view('admin.pasien.index', compact('pasien'));
     }
     public function edit(string $id)

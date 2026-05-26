@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Pendonor;
+use App\Models\DonorDarah;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 
@@ -15,129 +15,54 @@ class PendonorController extends Controller implements HasMiddleware
     {
         return [
 
-            new Middleware('permission:view pendonor', only: ['index', 'show']),
+            new Middleware(
+                'permission:view pendonor',
+                only: ['index', 'show']
+            ),
 
-            new Middleware('permission:create pendonor', only: ['create', 'store']),
-
-            new Middleware('permission:edit pendonor', only: ['edit', 'update']),
-
-            new Middleware('permission:delete pendonor', only: ['destroy']),
         ];
     }
 
     public function index()
     {
-        $pendonors = Pendonor::all();
-        return view('admin.pendonor.index', compact('pendonors'));
+        $pendonors = DonorDarah::latest()->get();
+
+        return view(
+            'admin.pendonor.index',
+            compact('pendonors')
+        );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('admin.pendonor.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-
-            'nama'             => 'required',
-            'nik'              => 'required|unique:pendonors',
-            'jenis_kelamin'    => 'required',
-            'golongan_darah'   => 'required',
-            'rhesus'           => 'required',
-            'alamat'           => 'required',
-            'no_hp'            => 'required',
-            'tanggal_lahir'    => 'required',
-
-        ]);
-        Pendonor::create([
-
-            'nama'             => $request->nama,
-            'nik'              => $request->nik,
-            'jenis_kelamin'    => $request->jenis_kelamin,
-            'golongan_darah'   => $request->golongan_darah,
-            'rhesus'           => $request->rhesus,
-            'alamat'           => $request->alamat,
-            'no_hp'            => $request->no_hp,
-            'tanggal_lahir'    => $request->tanggal_lahir,
-
-        ]);
-        return redirect()
-            ->route('admin.pendonor.index')
-            ->with('success', 'Data pendonor berhasil ditambahkan');
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        $pendonor = Pendonor::findorFail($id);
-        return view('admin.pendonor.show', compact('pendonor'));
+        $pendonor = DonorDarah::findOrFail($id);
+
+        return view(
+            'admin.pendonor.show',
+            compact('pendonor')
+        );
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function updateStatus(Request $request, $id)
     {
-        $pendonor = Pendonor::findorFail($id);
-        return view('admin.pendonor.edit', compact('pendonor'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $pendonor = Pendonor::findOrFail($id);
-
         $request->validate([
 
-            'nama'             => 'required',
-            'nik'              => 'required|unique:pendonors,nik,' . $pendonor->id,
-            'jenis_kelamin'    => 'required',
-            'golongan_darah'   => 'required',
-            'rhesus'           => 'required',
-            'alamat'           => 'required',
-            'no_hp'            => 'required',
-            'tanggal_lahir'    => 'required',
+            'status' => 'required|in:   Menunggu,Diterima,Selesai,Ditolak',
 
         ]);
+
+        $pendonor = DonorDarah::findOrFail($id);
 
         $pendonor->update([
 
-            'nama'             => $request->nama,
-            'nik'              => $request->nik,
-            'jenis_kelamin'    => $request->jenis_kelamin,
-            'golongan_darah'   => $request->golongan_darah,
-            'rhesus'           => $request->rhesus,
-            'alamat'           => $request->alamat,
-            'no_hp'            => $request->no_hp,
-            'tanggal_lahir'    => $request->tanggal_lahir,
+            'status' => $request->status,
 
         ]);
 
         return redirect()
             ->route('admin.pendonor.index')
-            ->with('success', 'Data pendonor berhasil diupdate');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $pendonor = Pendonor::findOrFail($id);
-        $pendonor->delete();
-        return redirect()
-            ->route('admin.pendonor.index')
-            ->with('success', 'Data pendonor berhasil dihapus');
+            ->with(
+                'success',
+                'Status donor berhasil diperbarui'
+            );
     }
 }

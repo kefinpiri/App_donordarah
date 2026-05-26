@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pendonor extends Model
 {
     protected $fillable = [
+        'user_id',
         'nama',
         'nik',
         'jenis_kelamin',
@@ -16,4 +17,8 @@ class Pendonor extends Model
         'no_hp',
         'tanggal_lahir',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

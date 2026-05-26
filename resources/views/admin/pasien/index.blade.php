@@ -11,9 +11,9 @@
                     Data Pemohon Darah
                 </h3>
                 @can('create pasien')
-                <p class="text-muted mb-0">
-                    Daftar data pasien / pemohon darah
-                </p>
+                    <p class="text-muted mb-0">
+                        Daftar data pasien / pemohon darah
+                    </p>
                 @endcan
             </div>
 
@@ -52,7 +52,7 @@
                                 <th>Jumlah</th>
                                 <th>Rumah Sakit</th>
                                 <th>Status</th>
-                                <th width="180">Aksi</th>
+                                <th>Keterangan</th>
 
                             </tr>
 
@@ -68,7 +68,7 @@
                                     </td>
 
                                     <td>
-                                        {{ $item->nama }}
+                                        {{ $item->nama_pasien }}
                                     </td>
 
                                     <td>
@@ -86,12 +86,11 @@
                                             {{ $item->golongan_darah }}
 
                                         </span>
-
                                     </td>
 
                                     <td class="text-center">
 
-                                        {{ $item->jumlah_darah }} Kantong
+                                        {{ $item->jumlah_kantong }} Kantong
 
                                     </td>
 
@@ -103,19 +102,19 @@
 
                                     <td class="text-center">
 
-                                        @if ($item->status == 'Menunggu')
-                                            <span class="badge bg-warning">
-                                                Menunggu
+                                        @if ($item->status == 'pending')
+                                            <span class="badge bg-secondary">
+                                                Pending
                                             </span>
-                                        @elseif($item->status == 'Diproses')
-                                            <span class="badge bg-primary">
+                                        @elseif($item->status == 'diproses')
+                                            <span class="badge bg-warning">
                                                 Diproses
                                             </span>
-                                        @elseif($item->status == 'Disetujui')
+                                        @elseif($item->status == 'selesai')
                                             <span class="badge bg-success">
                                                 Disetujui
                                             </span>
-                                        @elseif($item->status == 'Ditolak')
+                                        @elseif($item->status == 'ditolak')
                                             <span class="badge bg-danger">
                                                 Ditolak
                                             </span>
@@ -126,38 +125,10 @@
                                         @endif
 
                                     </td>
-
-                                    <td class="text-center">
-
-                                        {{-- BUTTON EDIT --}}
-                                        @can('edit petugas')
-                                            <a href="{{ route('admin.pasien.edit', $item->id) }}"
-                                                class="btn btn-warning btn-sm">
-
-                                                Edit
-                                            </a>
-                                        @endcan
-
-                                        {{-- BUTTON DELETE --}}
-                                        @can('delete petugas')
-                                            <form action="{{ route('admin.pasien.destroy', $item->id) }}" method="POST"
-                                                class="d-inline">
-
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    onclick="return confirm('Yakin hapus data?')">
-
-                                                    Hapus
-
-                                                </button>
-                                            </form>
-                                        @endcan
+                                    <td>
+                                        {{ $item->keterangan ?? '-' }}
                                     </td>
-
                                 </tr>
-
                             @empty
 
                                 <tr>

@@ -1,141 +1,159 @@
-<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+<aside class="app-sidebar sidebar-modern shadow-lg" data-bs-theme="dark">
 
+    {{-- BRAND --}}
     <div class="sidebar-brand">
         <a href="{{ url('/dashboard') }}" class="brand-link">
-            <img src="{{ asset('assets/img/AdminLTELogo.png') }}" class="brand-image opacity-75 shadow" />
-            <span class="brand-text fw-light">Donor Darah</span>
+            <img src="{{ asset('assets/img/AdminLTELogo.png') }}" class="brand-image shadow" />
+            <span class="brand-text">Donor Darah</span>
         </a>
     </div>
 
+    {{-- MENU --}}
     <div class="sidebar-wrapper">
-        <nav class="mt-2">
-
+        <nav class="mt-3">
             <ul class="nav sidebar-menu flex-column">
-
-                {{-- DASHBOARD (SEMUA ROLE) --}}
-                <li class="nav-item">
-                    <a href="{{ url('/dashboard') }}" class="nav-link">
-                        <i class="nav-icon bi bi-speedometer"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
 
                 {{-- ================= ADMIN ================= --}}
                 @role('admin')
-                    {{-- <li class="nav-item">
-                        <a href="{{ url('/admin') }}" class="nav-link">
-                            <i class="nav-icon bi bi-person-gear"></i>
-                            <p>Admin</p>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <i class="nav-icon bi bi-house-heart"></i>
+                            <p>Dashboard</p>
                         </a>
-                    </li> --}}
+                    </li>
+
                     @can('view petugas')
                         <li class="nav-item">
-                            <a href="{{ url('/admin/petugas') }}" class="nav-link">
+                            <a href="{{ url('/admin/petugas') }}"
+                                class="nav-link {{ request()->is('admin/petugas*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-person-badge"></i>
                                 <p>Petugas</p>
                             </a>
                         </li>
-                    @endrole
+                    @endcan
 
                     @can('view pendonor')
                         <li class="nav-item">
-                            <a href="{{ route('admin.pendonor.index') }}" class="nav-link">
-                                <i class="nav-icon bi bi-people"></i>
+                            <a href="{{ route('admin.pendonor.index') }}"
+                                class="nav-link {{ request()->is('admin/pendonor*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-droplet-half"></i>
                                 <p>Pendonor</p>
                             </a>
                         </li>
-                    @endrole
+                    @endcan
 
                     @can('view pasien')
                         <li class="nav-item">
-                            <a href="{{ url('/admin/pasien') }}" class="nav-link">
-                                <i class="nav-icon bi bi-hospital"></i>
+                            <a href="{{ url('/admin/pasien') }}"
+                                class="nav-link {{ request()->is('admin/pasien*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-heart-pulse"></i>
                                 <p>Pasien</p>
                             </a>
                         </li>
-                        @endrole
+                    @endcan
 
-                        <li class="nav-item">
-                            <a href="{{ url('/admin/roles') }}" class="nav-link">
-                                <i class="nav-icon bi bi-shield-lock"></i>
-                                <p>Role</p>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/admin/roles') }}" class="nav-link">
+                            <i class="nav-icon bi bi-people"></i>
+                            <p>Role</p>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a href="{{ url('/admin/permissions') }}" class="nav-link">
-                                <i class="nav-icon bi bi-key"></i>
-                                <p>Permission</p>
-                            </a>
-                        </li>
-                    @endrole
-                    {{-- ================= PETUGAS ================= --}}
-                    @role('petugas')
-                        <li class="nav-item">
-                            <a href="{{ url('/stok-darah') }}" class="nav-link">
-                                <i class="bi bi-droplet"></i>
-                                <p>Stok Darah</p>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/admin/permissions') }}" class="nav-link">
+                            <i class="nav-icon bi bi-toggles"></i>
+                            <p>Permission</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.laporan') }}" class="nav-link">
+                            <i class="nav-icon bi bi-file-earmark-bar-graph"></i>
+                            <p>Laporan</p>
+                        </a>
+                    </li>
+                @endrole
 
-                        <li class="nav-item">
-                            <a href="{{ url('/permintaan-darah') }}" class="nav-link">
-                                <i class="bi bi-file-medical"></i>
-                                <p>Permintaan Darah</p>
-                            </a>
-                        </li>
+                {{-- ================= PETUGAS ================= --}}
+                @role('petugas')
+                    <li class="nav-item">
+                        <a href="{{ route('petugas.dashboard') }}" class="nav-link">
+                            <i class="nav-icon bi bi-house-heart"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('petugas.stok-darah.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-droplet-fill"></i>
+                            <p>Stok Darah</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('petugas.permintaan-darah.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-file-medical"></i>
+                            <p>Permintaan Darah</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('petugas.distribusi-darah.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-truck-front"></i>
+                            <p>Distribusi</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('petugas.laporan') }}" class="nav-link">
+                            <i class="nav-icon bi bi-file-earmark-bar-graph"></i>
+                            <p>Laporan</p>
+                        </a>
+                    </li>
+                @endrole
 
-                        <li class="nav-item">
-                            <a href="{{ url('/distribusi-darah') }}" class="nav-link">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <p>Distribusi</p>
-                            </a>
-                        </li>
-                    @endrole
+                {{-- ================= DONOR ================= --}}
+                @role('donor')
+                    <li class="nav-item">
+                        <a href="{{ route('donor.dashboard') }}" class="nav-link">
+                            <i class="nav-icon bi bi-house-heart"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/donor/jadwal') }}" class="nav-link">
+                            <i class="nav-icon bi bi-calendar-heart"></i>
+                            <p>Jadwal Donor</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ url('/donor/riwayat') }}" class="nav-link">
+                            <i class="nav-icon bi bi-journal-medical"></i>
+                            <p>Riwayat Donor</p>
+                        </a>
+                    </li>
+                @endrole
 
-                    {{-- ================= PENDONOR ================= --}}
-                    @role('donor')
-                        <li class="nav-item">
-                            <a href="{{ url('/donor/profil') }}" class="nav-link">
-                                <i class="nav-icon bi bi-person-circle"></i>
-                                <p>Profil Donor</p>
-                            </a>
-                        </li>
+                {{-- ================= PEMOHON ================= --}}
+                @role('pemohon')
+                    <li class="nav-item">
+                        <a href="{{ route('pemohon.dashboard') }}" class="nav-link">
+                            <i class="nav-icon bi bi-house-heart"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('pemohon.permintaan-darah.create') }}" class="nav-link">
+                            <i class="nav-icon bi bi-file-medical-fill"></i>
+                            <p>Permintaan Darah</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('pemohon.permintaan-darah.index') }}" class="nav-link">
+                            <i class="nav-icon bi bi-activity"></i>
+                            <p>Status Permintaan</p>
+                        </a>
+                    </li>
+                @endrole
 
-                        <li class="nav-item">
-                            <a href="{{ url('/donor/jadwal') }}" class="nav-link">
-                                <i class="nav-icon bi bi-calendar-event"></i>
-                                <p>Jadwal Donor</p>
-                            </a>
-                        </li>
+            </ul>
+        </nav>
+    </div>
 
-                        <li class="nav-item">
-                            <a href="{{ url('/donor/riwayat') }}" class="nav-link">
-                                <i class="nav-icon bi bi-clock-history"></i>
-                                <p>Riwayat Donor</p>
-                            </a>
-                        </li>
-                    @endrole
-                    {{-- ================= PASIEN / PEMOHON ================= --}}
-                    @role('pemohon')
-                        <li class="nav-item">
-                            <a href="{{ url('/permintaan-saya') }}" class="nav-link">
-                                <i class="bi bi-file-medical"></i>
-                                <p>Permintaan Darah</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ url('/status-permintaan') }}" class="nav-link">
-                                <i class="bi bi-activity"></i>
-                                <p>Status Permintaan</p>
-                            </a>
-                        </li>
-                    @endrole
-
-                </ul>
-
-            </nav>
-        </div>
-
-    </aside>
+</aside>

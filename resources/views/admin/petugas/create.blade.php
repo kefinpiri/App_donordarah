@@ -4,7 +4,7 @@
     <div class="container-fluid">
 
         <div class="mb-4">
-            <h3 class="text-2xl font-bold text-gray-800">
+            <h3 class="text-2xl font-bold text-danger">
                 Tambah Petugas
             </h3>
 
