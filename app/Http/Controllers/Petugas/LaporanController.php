@@ -11,16 +11,28 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
+    /**
+     * HALAMAN LAPORAN
+     */
     public function index(Request $request)
     {
         $query = PermintaanDarah::query();
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER TANGGAL
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->tanggal_awal) {
+
             $query->whereDate(
                 'tanggal_permintaan',
                 '>=',
                 $request->tanggal_awal
             );
         }
+
         if ($request->tanggal_akhir) {
 
             $query->whereDate(
@@ -30,26 +42,42 @@ class LaporanController extends Controller
             );
         }
 
-        // Data laporan
+        /*
+        |--------------------------------------------------------------------------
+        | DATA LAPORAN
+        |--------------------------------------------------------------------------
+        */
+
         $laporan = $query->latest()->get();
 
-        // Statistik laporan
+        /*
+        |--------------------------------------------------------------------------
+        | STATISTIK
+        |--------------------------------------------------------------------------
+        */
+
         $totalPermintaan = $laporan->count();
 
         $pending = $laporan->where(
             'status',
-            'pending'
+            'Pending'
         )->count();
 
         $disetujui = $laporan->where(
             'status',
-            'disetujui'
+            'Disetujui'
         )->count();
 
         $ditolak = $laporan->where(
             'status',
-            'ditolak'
+            'Ditolak'
         )->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN VIEW
+        |--------------------------------------------------------------------------
+        */
 
         return view(
             'petugas.laporan.index',
@@ -62,9 +90,14 @@ class LaporanController extends Controller
             )
         );
     }
+
+    /**
+     * EXPORT PDF
+     */
     public function exportPdf()
     {
         $laporan = PermintaanDarah::latest()->get();
+
         $pdf = Pdf::loadView(
             'petugas.laporan.pdf',
             compact('laporan')
@@ -74,6 +107,10 @@ class LaporanController extends Controller
             'laporan-permintaan-darah.pdf'
         );
     }
+
+    /**
+     * EXPORT EXCEL
+     */
     public function exportExcel()
     {
         return Excel::download(

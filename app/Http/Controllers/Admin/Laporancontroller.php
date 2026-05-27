@@ -17,8 +17,6 @@ class LaporanController extends Controller
     public function index(Request $request)
     {
         $query = PermintaanDarah::query();
-
-        // FILTER TANGGAL AWAL
         if ($request->tanggal_awal) {
 
             $query->whereDate(
@@ -27,6 +25,7 @@ class LaporanController extends Controller
                 $request->tanggal_awal
             );
         }
+
         if ($request->tanggal_akhir) {
 
             $query->whereDate(
@@ -36,21 +35,22 @@ class LaporanController extends Controller
             );
         }
         $laporan = $query->latest()->get();
+
         $totalPermintaan = $laporan->count();
 
         $pending = $laporan->where(
             'status',
-            'pending'
+            'Pending'
         )->count();
 
         $disetujui = $laporan->where(
             'status',
-            'disetujui'
+            'Disetujui'
         )->count();
 
         $ditolak = $laporan->where(
             'status',
-            'ditolak'
+            'Ditolak'
         )->count();
 
         return view(
@@ -82,9 +82,6 @@ class LaporanController extends Controller
         );
     }
 
-    /**
-     * EXPORT EXCEL
-     */
     public function exportExcel()
     {
         return Excel::download(

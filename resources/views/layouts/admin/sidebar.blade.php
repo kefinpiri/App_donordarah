@@ -3,7 +3,7 @@
     {{-- BRAND --}}
     <div class="sidebar-brand">
         <a href="{{ url('/dashboard') }}" class="brand-link">
-            <img src="{{ asset('assets/img/AdminLTELogo.png') }}" class="brand-image shadow" />
+            <img src="{{ asset('assets/img/donor.png') }}" class="brand-image shadow" />
             <span class="brand-text">Donor Darah</span>
         </a>
     </div>

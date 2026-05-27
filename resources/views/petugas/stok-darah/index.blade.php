@@ -8,7 +8,7 @@
 
                 <h3 class="mb-0">Data Stok Darah</h3>
 
-                <a href="{{ route('petugas.stok-darah.create') }}" class="btn btn-primary">
+                <a href="{{ route('petugas.stok-darah.create') }}" class="btn btn-danger">
 
                     <i class="bi bi-plus-circle"></i>
                     Tambah Data
@@ -35,7 +35,7 @@
 
                     <table class="table table-bordered table-striped align-middle">
 
-                        <thead class="table-dark">
+                        <thead class="table-danger">
 
                             <tr>
                                 <th>No</th>

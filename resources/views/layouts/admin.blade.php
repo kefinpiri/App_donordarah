@@ -88,16 +88,32 @@
 
         /* Ikon */
         .sidebar-menu .nav-icon {
-            font-size: 16px !important;
+            font-size: 20px !important;
             flex-shrink: 0 !important;
-            width: 18px !important;
+            width: 24px !important;
             text-align: center !important;
         }
 
+        .sidebar-menu .nav-item {
+            margin: 6px 10px !important;
+        }
+
+        .app-sidebar {
+            width: 270px !important;
+        }
+
         /* Teks menu */
-        .sidebar-menu .nav-link p {
-            margin: 0 !important;
-            line-height: 1 !important;
+        .sidebar-menu .nav-link {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            padding: 13px 16px !important;
+            border-radius: 12px !important;
+            color: rgba(255, 255, 255, 0.75) !important;
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            text-decoration: none !important;
         }
     </style>
     @stack('styles')

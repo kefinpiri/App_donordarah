@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan Permintaan Darah')
+@section('title', 'Laporan Admin')
 
 @section('content')
 
@@ -17,15 +17,38 @@
 
                         <i class="bi bi-file-earmark-text-fill text-primary me-2"></i>
 
-                        Laporan Permintaan Darah
+                        Laporan Admin
 
                     </h3>
 
                     <p class="text-muted mb-0">
 
-                        Data laporan permintaan darah sistem
+                        Kelola dan monitor seluruh laporan permintaan darah
 
                     </p>
+
+                </div>
+
+                {{-- BUTTON EXPORT --}}
+                <div class="d-flex gap-2">
+
+                    {{-- EXPORT PDF --}}
+                    <a href="{{ route('admin.export.pdf') }}" class="btn btn-danger rounded-pill px-4 shadow-sm">
+
+                        <i class="bi bi-file-earmark-pdf me-1"></i>
+
+                        Export PDF
+
+                    </a>
+
+                    {{-- EXPORT EXCEL --}}
+                    <a href="{{ route('admin.export.excel') }}" class="btn btn-success rounded-pill px-4 shadow-sm">
+
+                        <i class="bi bi-file-earmark-excel me-1"></i>
+
+                        Export Excel
+
+                    </a>
 
                 </div>
 
@@ -45,7 +68,7 @@
 
                 <div class="card-body">
 
-                    <form method="GET" action="{{ route('petugas.laporan') }}">
+                    <form method="GET" action="{{ route('admin.laporan') }}">
 
                         <div class="row g-3 align-items-end">
 
@@ -89,7 +112,7 @@
 
                                 </button>
 
-                                <a href="{{ route('petugas.laporan') }}" class="btn btn-light rounded-pill px-4 shadow-sm">
+                                <a href="{{ route('admin.laporan') }}" class="btn btn-light rounded-pill px-4 shadow-sm">
 
                                     <i class="bi bi-arrow-clockwise me-1"></i>
 
@@ -167,7 +190,7 @@
 
                                     </p>
 
-                                    <h2 class="fw-bold mb-0">
+                                    <h2 class="fw-bold mb-0 text-warning">
 
                                         {{ $pending }}
 
@@ -207,7 +230,7 @@
 
                                     </p>
 
-                                    <h2 class="fw-bold mb-0">
+                                    <h2 class="fw-bold mb-0 text-success">
 
                                         {{ $disetujui }}
 
@@ -247,7 +270,7 @@
 
                                     </p>
 
-                                    <h2 class="fw-bold mb-0">
+                                    <h2 class="fw-bold mb-0 text-danger">
 
                                         {{ $ditolak }}
 
@@ -277,38 +300,24 @@
 
                 <div class="card-header border-0 py-3 px-4" style="background:#f8fafc;">
 
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
 
-                        <div>
+                        <h5 class="fw-bold mb-1">
 
-                            <h5 class="fw-bold mb-1">
+                            Data Laporan
 
-                                Data Laporan
+                        </h5>
 
-                            </h5>
+                        <small class="text-muted">
 
-                            <small class="text-muted">
+                            Daftar laporan permintaan darah
 
-                                Daftar laporan permintaan darah
+                        </small>
 
-                            </small>
-
-                        </div>
-
-                        {{-- BUTTON EXPORT PDF --}}
-                        <div>
-                            <a href="{{ route('petugas.export.pdf') }}" class="btn btn-danger rounded-pill px-4 shadow-sm">
-                                <i class="bi bi-file-earmark-pdf me-1"></i>
-                                Export PDF
-                            </a>
-                            <a
-                                href="{{ route('petugas.export.excel') }}"class="btn btn-success rounded-pill px-4 shadow-sm"><i
-                                    class="bi bi-file-earmark-excel me-1"></i>
-                                Export Excel
-                            </a>
-                        </div>
                     </div>
+
                 </div>
+
                 <div class="card-body p-0">
 
                     <div class="table-responsive">
@@ -346,8 +355,11 @@
                                     <th class="py-3 px-4">
                                         Tanggal
                                     </th>
+
                                 </tr>
+
                             </thead>
+
                             <tbody>
 
                                 @forelse ($laporan as $item)
@@ -413,27 +425,38 @@
 
                                         </td>
 
+                                        {{-- STATUS --}}
                                         <td class="py-3">
 
-                                            @if ($item->status == 'pending')
+                                            @php
+                                                $status = strtolower($item->status);
+                                            @endphp
+
+                                            @if ($status == 'pending')
                                                 <span class="badge rounded-pill px-3 py-2 fw-medium"
                                                     style="background:#fef3c7;color:#92400e;">
 
                                                     Pending
 
                                                 </span>
-                                            @elseif ($item->status == 'disetujui')
+                                            @elseif ($status == 'disetujui')
                                                 <span class="badge rounded-pill px-3 py-2 fw-medium"
                                                     style="background:#ECFDF3;color:#027A48;">
 
                                                     Disetujui
 
                                                 </span>
-                                            @elseif ($item->status == 'ditolak')
+                                            @elseif ($status == 'ditolak')
                                                 <span class="badge rounded-pill px-3 py-2 fw-medium"
                                                     style="background:#fee2e2;color:#b91c1c;">
 
                                                     Ditolak
+
+                                                </span>
+                                            @else
+                                                <span class="badge bg-secondary">
+
+                                                    {{ $item->status }}
 
                                                 </span>
                                             @endif
@@ -471,7 +494,7 @@
 
                                                 <small>
 
-                                                    Laporan permintaan darah akan tampil di sini
+                                                    Laporan akan tampil di sini
 
                                                 </small>
 

@@ -13,7 +13,7 @@
 
             </div>
 
-            <div class="card-body">
+            <div class="card-body">     
 
                 @if (session('success'))
                     <div class="alert alert-success">
@@ -30,19 +30,12 @@
                         <thead class="table-danger">
 
                             <tr>
-
                                 <th>No</th>
-
                                 <th>Tanggal Donor</th>
-
                                 <th>Lokasi</th>
-
                                 <th>Status</th>
-
                                 <th>Catatan</th>
-
                             </tr>
-
                         </thead>
 
                         <tbody>

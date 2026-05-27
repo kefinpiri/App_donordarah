@@ -33,7 +33,8 @@
                 <div class="d-flex gap-2">
 
                     {{-- EXPORT PDF --}}
-                    <a href="{{ route('admin.export.pdf') }}" class="btn btn-danger rounded-pill px-4 shadow-sm">
+                    <a href="{{ route('admin.export.pdf') }}"
+                        class="btn btn-danger rounded-pill px-4 shadow-sm">
 
                         <i class="bi bi-file-earmark-pdf me-1"></i>
 
@@ -42,7 +43,8 @@
                     </a>
 
                     {{-- EXPORT EXCEL --}}
-                    <a href="{{ route('admin.export.excel') }}" class="btn btn-success rounded-pill px-4 shadow-sm">
+                    <a href="{{ route('admin.export.excel') }}"
+                        class="btn btn-success rounded-pill px-4 shadow-sm">
 
                         <i class="bi bi-file-earmark-excel me-1"></i>
 
@@ -68,7 +70,8 @@
 
                 <div class="card-body">
 
-                    <form method="GET" action="{{ route('admin.laporan') }}">
+                    <form method="GET"
+                        action="{{ route('admin.laporan') }}">
 
                         <div class="row g-3 align-items-end">
 
@@ -81,7 +84,9 @@
 
                                 </label>
 
-                                <input type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}"
+                                <input type="date"
+                                    name="tanggal_awal"
+                                    value="{{ request('tanggal_awal') }}"
                                     class="form-control rounded-3">
 
                             </div>
@@ -95,7 +100,9 @@
 
                                 </label>
 
-                                <input type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}"
+                                <input type="date"
+                                    name="tanggal_akhir"
+                                    value="{{ request('tanggal_akhir') }}"
                                     class="form-control rounded-3">
 
                             </div>
@@ -103,7 +110,8 @@
                             {{-- BUTTON --}}
                             <div class="col-md-4">
 
-                                <button type="submit" class="btn text-white rounded-pill px-4 shadow-sm"
+                                <button type="submit"
+                                    class="btn text-white rounded-pill px-4 shadow-sm"
                                     style="background:#2563eb;">
 
                                     <i class="bi bi-search me-1"></i>
@@ -112,7 +120,8 @@
 
                                 </button>
 
-                                <a href="{{ route('admin.laporan') }}" class="btn btn-light rounded-pill px-4 shadow-sm">
+                                <a href="{{ route('admin.laporan') }}"
+                                    class="btn btn-light rounded-pill px-4 shadow-sm">
 
                                     <i class="bi bi-arrow-clockwise me-1"></i>
 
@@ -190,7 +199,7 @@
 
                                     </p>
 
-                                    <h2 class="fw-bold mb-0">
+                                    <h2 class="fw-bold mb-0 text-warning">
 
                                         {{ $pending }}
 
@@ -230,7 +239,7 @@
 
                                     </p>
 
-                                    <h2 class="fw-bold mb-0">
+                                    <h2 class="fw-bold mb-0 text-success">
 
                                         {{ $disetujui }}
 
@@ -270,7 +279,7 @@
 
                                     </p>
 
-                                    <h2 class="fw-bold mb-0">
+                                    <h2 class="fw-bold mb-0 text-danger">
 
                                         {{ $ditolak }}
 
@@ -298,7 +307,8 @@
             {{-- TABLE --}}
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
-                <div class="card-header border-0 py-3 px-4" style="background:#f8fafc;">
+                <div class="card-header border-0 py-3 px-4"
+                    style="background:#f8fafc;">
 
                     <div>
 
@@ -329,45 +339,31 @@
                                 <tr style="border-bottom:2px solid #e5e7eb;">
 
                                     <th class="py-3 px-4 text-center">
-
                                         No
-
                                     </th>
 
                                     <th class="py-3 px-4">
-
                                         Nama Pasien
-
                                     </th>
 
                                     <th class="py-3 px-4">
-
                                         Golongan
-
                                     </th>
 
                                     <th class="py-3 px-4">
-
                                         Jumlah
-
                                     </th>
 
                                     <th class="py-3 px-4">
-
                                         Rumah Sakit
-
                                     </th>
 
                                     <th class="py-3 px-4">
-
                                         Status
-
                                     </th>
 
                                     <th class="py-3 px-4">
-
                                         Tanggal
-
                                     </th>
 
                                 </tr>
@@ -377,6 +373,7 @@
                             <tbody>
 
                                 @forelse ($laporan as $item)
+
                                     <tr style="border-bottom:1px solid #e5e7eb;">
 
                                         <td class="text-center py-3 text-muted fw-semibold">
@@ -385,9 +382,34 @@
 
                                         </td>
 
-                                        <td class="py-3 fw-semibold">
+                                        <td class="py-3">
 
-                                            {{ $item->nama_pasien }}
+                                            <div class="d-flex align-items-center gap-3">
+
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                                    style="width:42px;height:42px;background:#eff6ff;">
+
+                                                    <i class="bi bi-person-fill text-primary"></i>
+
+                                                </div>
+
+                                                <div>
+
+                                                    <div class="fw-semibold text-dark">
+
+                                                        {{ $item->nama_pasien }}
+
+                                                    </div>
+
+                                                    <small class="text-muted">
+
+                                                        {{ $item->jenis_kelamin }}
+
+                                                    </small>
+
+                                                </div>
+
+                                            </div>
 
                                         </td>
 
@@ -414,29 +436,48 @@
 
                                         </td>
 
+                                        {{-- STATUS --}}
                                         <td class="py-3">
 
-                                            @if ($item->status == 'pending')
+                                            @php
+                                                $status = strtolower($item->status);
+                                            @endphp
+
+                                            @if ($status == 'pending')
+
                                                 <span class="badge rounded-pill px-3 py-2 fw-medium"
                                                     style="background:#fef3c7;color:#92400e;">
 
                                                     Pending
 
                                                 </span>
-                                            @elseif ($item->status == 'disetujui')
+
+                                            @elseif ($status == 'disetujui')
+
                                                 <span class="badge rounded-pill px-3 py-2 fw-medium"
                                                     style="background:#ECFDF3;color:#027A48;">
 
                                                     Disetujui
 
                                                 </span>
-                                            @elseif ($item->status == 'ditolak')
+
+                                            @elseif ($status == 'ditolak')
+
                                                 <span class="badge rounded-pill px-3 py-2 fw-medium"
                                                     style="background:#fee2e2;color:#b91c1c;">
 
                                                     Ditolak
 
                                                 </span>
+
+                                            @else
+
+                                                <span class="badge bg-secondary">
+
+                                                    {{ $item->status }}
+
+                                                </span>
+
                                             @endif
 
                                         </td>
@@ -453,7 +494,8 @@
 
                                     <tr>
 
-                                        <td colspan="7" class="text-center py-5">
+                                        <td colspan="7"
+                                            class="text-center py-5">
 
                                             <div class="d-flex flex-column align-items-center text-muted">
 
@@ -481,6 +523,7 @@
                                         </td>
 
                                     </tr>
+
                                 @endforelse
 
                             </tbody>
